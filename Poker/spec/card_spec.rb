@@ -31,7 +31,13 @@ describe Card do
     end
   end
 
-  describe "#==" do
+  describe "#poker value" do
+    it "gives the poker value" do
+      expect(ace_of_spades.poker_value).to eq(14)
+    end
+  end
+
+  describe "#<=>" do
     it "two_of_hearts is equal to another two_of_hearts" do
       expect(two_of_hearts == other_two_of_hearts).to be_true
     end
@@ -39,9 +45,7 @@ describe Card do
     it "two_of_hearts is equal to two_of_clubs" do
       expect(two_of_hearts == two_of_clubs).to be_true
     end
-  end
 
-  describe "#<=>" do
     it "compares the value of two cards" do
       expect(king_of_clubs > two_of_clubs).to be_true
     end

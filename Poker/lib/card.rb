@@ -63,6 +63,10 @@ class Card
     POKER_VALUES[value] <=> POKER_VALUES[other_card.value]
   end
 
+  def poker_value
+    POKER_VALUES[value]
+  end
+
   def to_s
     VALUES[value]+SUITS[suit]
   end
