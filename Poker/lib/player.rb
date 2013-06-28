@@ -2,16 +2,16 @@ require_relative 'hand'
 
 class Player
 
-  attr_accessor :hand, :pot
+  attr_accessor :hand, :chips
 
-  def initialize(pot = 0)
-    @pot = pot
+  def initialize(chips = 0)
+    @chips = chips
     @hand = Hand.new
   end
 
   def bet(bet_amt)
-    raise PotError.new, "Insufficient Funds" if pot < bet_amt
-    @pot -= bet_amt
+    raise ChipsError.new, "Insufficient Funds" if chips < bet_amt
+    @chips -= bet_amt
     bet_amt
   end
 
@@ -19,8 +19,8 @@ class Player
     @hand = Hand.new
   end
 
-  def respond_to_turn(current_bet, current_pot)
-    puts "The current bet is #{current_bet}. The pot is #{current_pot}."
+  def respond_to_turn(current_bet, current_chips)
+    puts "The current bet is #{current_bet}. The chips is #{current_chips}."
     puts "Raise \#{amount}, call, or fold?"
     parse_input(gets.chomp.downcase)
   end
@@ -39,7 +39,7 @@ class Player
   end
 
   def collect_winnings(winnings)
-    @pot += winnings
+    @chips += winnings
   end
 
   def parse_input(string)
@@ -54,7 +54,7 @@ class Player
 
 end
 
-class PotError < StandardError
+class ChipsError < StandardError
 end
 
 class InputError < StandardError

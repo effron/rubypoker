@@ -11,31 +11,31 @@ describe Player do
       expect(player.hand).to be_an_instance_of(Hand)
     end
 
-    it "Defaults to zero pot" do
-      expect(player.pot).to eq(0)
+    it "Defaults to zero chips" do
+      expect(player.chips).to eq(0)
     end
 
-    it "Allows setting specific pot" do
+    it "Allows setting specific chips" do
       player_1 = Player.new(50)
-      expect(player_1.pot).to eq(50)
+      expect(player_1.chips).to eq(50)
     end
   end
 
   describe "#bet" do
-    it "Lowers your pot when you bet" do
+    it "Lowers your chips when you bet" do
       rich_player.bet(10)
-      expect(rich_player.pot).to eq(490)
+      expect(rich_player.chips).to eq(490)
     end
 
-    it "Doesn't let you bet bigger than your pot" do
-      expect { rich_player.bet(600) }.to raise_error(PotError)
+    it "Doesn't let you bet bigger than your chips" do
+      expect { rich_player.bet(600) }.to raise_error(ChipsError)
     end
   end
 
   describe "#collect_winnings" do
-    it "Adds money to your pot" do
+    it "Adds money to your chips" do
       player.collect_winnings(500)
-      expect(player.pot).to eq(500)
+      expect(player.chips).to eq(500)
     end
   end
 
