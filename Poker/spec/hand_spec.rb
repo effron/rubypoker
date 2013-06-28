@@ -24,12 +24,12 @@ describe Hand do
   let(:h_A) { Card.new(:hearts, :ace) }
   let(:s_A) { Card.new(:spades, :ace) }
   let(:hand) { Hand.new }
-  let(:high_card) { Hand.new([s_2, d_Q, c_9, d_T, h_A])}
+  let(:high_card) { Hand.new([s_2, d_Q, c_9, d_T, h_A]) }
   let(:pair) { Hand.new([s_9, d_Q, c_9, d_T, h_A]) }
-  let(:low_pair) { Hand.new([s_3, c_3, d_Q, d_T, h_4])}
-  let(:two_pair) { Hand.new([s_9, d_Q, c_9, d_T, s_T])}
+  let(:low_pair) { Hand.new([s_3, c_3, d_Q, d_T, h_4]) }
+  let(:two_pair) { Hand.new([s_9, d_Q, c_9, d_T, s_T]) }
   let(:three_of_a_kind) { Hand.new([h_A, s_9, s_2, h_9, c_9]) }
-  let(:middle_straight) { Hand.new([h_9, d_T, d_Q, s_J, d_8] )}
+  let(:middle_straight) { Hand.new([h_9, d_T, d_Q, s_J, d_8]) }
   let(:high_straight) { Hand.new([d_T, s_J, d_Q, h_A, c_K]) }
   let(:low_straight) { Hand.new([h_4, s_5, h_A, s_2, c_3]) }
   let(:flush) { Hand.new([s_2, s_5, s_9, s_T, s_J]) }
@@ -135,6 +135,27 @@ describe Hand do
 
     it "should rank an ace-5 straight lower than a middle straight" do
       expect(low_straight < middle_straight).to be_true
+    end
+  end
+
+  describe "#discard" do
+    it "should discard a card" do
+      high_card.discard([s_2])
+      expect(high_card.cards).to eq([d_Q, c_9, d_T, h_A])
+    end
+
+    it "should discard many cards" do
+      high_card.discard([s_2, c_9, d_T])
+      expect(high_card.cards).to eq([d_Q, h_A])
+    end
+
+    it "should only discard the desired card" do
+      quads.discard([h_9])
+      expect(quads.cards).to eq([h_9, s_T, c_9, d_9])
+    end
+
+    it "shouldn't discard a card it doesn't have" do
+      expect { high_card.discard([s_A]) }.to raise_error(HandError)
     end
   end
 

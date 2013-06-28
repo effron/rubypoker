@@ -23,6 +23,12 @@ describe Deck do
     it "lets you draw multiple cards" do
       expect(deck.draw(4)).to eq(Deck.new.cards[-4..-1])
     end
+
+    it "doesn't let you draw more cards than the deck has" do
+      expect{ deck.draw(54) }.to raise_error(DeckError)
+    end
+
+
   end
 
   describe "#shuffle" do

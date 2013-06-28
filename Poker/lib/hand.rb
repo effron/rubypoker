@@ -4,7 +4,7 @@ class Hand
   include Comparable
   attr_reader :cards
 
-  def initialize( cards = [])
+  def initialize(cards = [])
     @cards = cards
   end
 
@@ -71,6 +71,11 @@ class Hand
     straight? && flush?
   end
 
+  def single_card_values
+    cards = @cards.select{ |card| @cards.count(card) == 1 }
+    cards.map!{ |card| card.poker_value}
+  end
+
   def pair_rank
     pair_value = @cards.select { |card| @cards.count(card) == 2 }.first.poker_value
     other_cards = @cards.select { |card| @cards.count(card) == 1 }
@@ -135,8 +140,17 @@ class Hand
     end
   end
 
+  def discard(discard_cards)
+    cards_there = discard_cards.all? do |discard_card|
+      @cards.any? do |card|
+        card.eql?(discard_card)
+      end
+    end
+    raise HandError unless cards_there
+    @cards -= discard_cards
+  end
+
 end
 
-
-
-
+class HandError < StandardError
+end

@@ -8,6 +8,7 @@ class Deck
   end
 
   def draw(n)
+    raise DeckError.new, "Not enough cards in deck" if @cards.size < n
     cards.pop(n)
   end
 
@@ -22,5 +23,7 @@ class Deck
 
 end
 
+class DeckError < StandardError
+end
 
 
