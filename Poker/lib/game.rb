@@ -14,7 +14,7 @@ class Game
   def play
     @active_players = players
     ante_up
-    deck.shuffle
+    deck.reshuffle
     deal_cards
     display_hands
     betting_round

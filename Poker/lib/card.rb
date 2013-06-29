@@ -43,14 +43,7 @@ class Card
   }
 
   def self.all_cards
-    cards = []
-    SUITS.keys.each do |suit|
-      VALUES.keys.each do |value|
-        cards << Card.new(suit, value)
-      end
-    end
-
-    cards
+    SUITS.keys.product(VALUES.keys).map { |suit, value| Card.new(suit, value) }
   end
 
   attr_reader :suit, :value
