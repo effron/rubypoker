@@ -27,7 +27,7 @@ class Player
 
   def respond_to_which_cards
     puts "Which cards do you want to discard?"
-    prase_discards(gets.chomp)
+    parse_discards(gets.chomp)
   end
 
   def parse_discards(card_locations)
