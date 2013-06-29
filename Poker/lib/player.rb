@@ -20,7 +20,7 @@ class Player
   end
 
   def respond_to_turn(current_bet, current_chips)
-    puts "The current bet is #{current_bet}. The chips is #{current_chips}."
+    puts "You owe #{current_bet}. The pot is #{current_chips}."
     puts "Raise \#{amount}, call, or fold?"
     parse_input(gets.chomp.downcase)
   end
@@ -35,6 +35,7 @@ class Player
       raise InputError, "Improper card locations"
     end
     card_loc_array = card_locations.split(",").map(&:to_i)
+    raise InputError, "Too many cards" if card_loc_array.length > 3
     card_loc_array.map{ |index| hand.cards[index]}
   end
 

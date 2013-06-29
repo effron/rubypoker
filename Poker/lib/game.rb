@@ -12,17 +12,32 @@ class Game
   end
 
   def play
-    ante_up(@ante)
+    @active_players = players
+    ante_up
     deck.shuffle
     deal_cards
+    display_hands
     betting_round
+    display_hands
     discard_round
+    display_hands
     betting_round
-    choose_winner
+    payout_winner(choose_winner)
+    display_hands
+  end
+  
+  def display_hands
+    @active_players.each_with_index do |player, i|
+      puts "Player #{ i + 1 }: #{player.hand}"
+    end      
   end
 
-  def ante_up(ante)
-    @ante = ante
+  def payout_winner(winner)
+    winner.collect_winnings(@pot)
+    @pot = 0
+  end
+
+  def ante_up(ante = @ante)
     @players.each do |player|
       player.bet(ante)
     end
@@ -36,6 +51,7 @@ class Game
 
   def deal_cards
     @players.each do |player|
+      player.hand.cards = []
       player.hand.add_cards(@deck.draw(5))
     end
   end
@@ -52,6 +68,7 @@ class Game
   def betting_round
     current_bet = 0
     calls_in_a_row = 0
+    first_round = true
     players_owe_hash = Hash.new(0)
     @active_players.each do |player|
       players_owe_hash[player] = 0
@@ -65,18 +82,23 @@ class Game
       when :call
         player.bet(players_owe_hash[player])
         @pot += players_owe_hash[player]
-        players_owe_hash[player] -= current_bet
+        players_owe_hash[player] = current_bet * -1
         calls_in_a_row += 1
       when :fold
         fold(player)
       else
-        current_bet = response[1]
-        player.bet(players_owe_hash[player])
-        @pot += current_bet
+        player.bet(players_owe_hash[player] + response[1])
+        @pot += (players_owe_hash[player] + response[1])
+        current_bet += response[1]
+
         calls_in_a_row = 0
-        players_owe_hash[player] -= current_bet
+        players_owe_hash[player] = current_bet * -1
       end
-      break if calls_in_a_row == @active_players.length        
+      if player == @active_players.last
+        first_round = false
+      end
+      break if calls_in_a_row == @active_players.length - 1 && !first_round
+      break if calls_in_a_row == @active_players.length         
       break if @active_players.length == 1            
     end
   end

@@ -2,7 +2,7 @@ require_relative 'deck'
 
 class Hand
   include Comparable
-  attr_reader :cards
+  attr_accessor :cards
 
   def initialize(cards = [])
     @cards = cards
@@ -10,6 +10,10 @@ class Hand
 
   def add_cards(cards)
     @cards += cards
+  end
+  
+  def to_s
+    @cards.to_s
   end
 
   def hand_rank

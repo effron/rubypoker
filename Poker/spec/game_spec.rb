@@ -3,7 +3,7 @@ require 'game'
 
 describe Game do
   let(:deck) { double "deck" , :cards => [], :draw => ["A","Q","1","2","#3"]}
-  let(:hand) { double "hand" , :cards => [], :add_cards => nil, :discard => nil}
+  let(:hand) { double "hand" , :cards => [], :add_cards => nil, :discard => nil, :cards= => []}
   let(:player_1) { double "player1", :bet => nil, :hand => hand, :respond_to_which_cards => ["ace","queen"]}
   let(:player_2) { double "player2", :bet => nil, :hand => hand, :respond_to_which_cards => ["ace","queen"]}
   let(:player_3) { double "player2", :bet => nil, :hand => hand, :respond_to_which_cards => ["ace","queen"]}
@@ -85,14 +85,14 @@ describe Game do
     
     it "asks player to call a raised bet" do 
       player_2.stub(:respond_to_turn).and_return([:raise, 100], :call) 
-      game.players[2].should_receive(:respond_to_turn).with(100, game.pot)
+      game.players[2].should_receive(:respond_to_turn).with(100, 150)
       game.betting_round
     end
     
     it "asks player to call a raised bet even if he already called" do
       player_1.stub(:respond_to_turn).and_return([:raise, 50], :call) 
       player_2.stub(:respond_to_turn).and_return([:raise, 100], :call) 
-      game.players[0].should_receive(:respond_to_turn).with(50, game.pot)
+      game.players[0].should_receive(:respond_to_turn).with(100, 400)
       game.betting_round      
     end
     
@@ -110,6 +110,20 @@ describe Game do
     end
   end
 
+  context '#payout_winner' do
+    let(:game) { Game.new(deck, [player_1, player_2, player_3], 500) }
+    
+    it "empties the pot" do
+      player_1.stub(:collect_winnings).and_return(true)
+      game.payout_winner(player_1)
+      expect(game.pot).to eq(0)
+    end
+    
+    it "pays the winner" do
+      player_1.should_receive(:collect_winnings).with(game.pot)
+      game.payout_winner(player_1)
+    end
+  end
   
 
 end
