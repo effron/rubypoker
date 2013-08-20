@@ -1,5 +1,5 @@
 rubypoker
 =========
-Solo work from Week 2, Day 5 of App Academy
+Compare poker hands and play a round of draw-poker.
 
-Projects were made following the principals of TDD, with the tests written using RSpec.
+Projects were made following the principals of TDD using the RSpec DSL.
